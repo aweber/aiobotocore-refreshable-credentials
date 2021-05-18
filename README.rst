@@ -19,7 +19,7 @@ Usage
 
 Python Versions Supported
 -------------------------
-3.7+
+3.8+
 
 .. |Version| image:: https://img.shields.io/pypi/v/aiobotocore-refreshable-credentials.svg?
    :target: https://pypi.python.org/pypi/aiobotocore-refreshable-credentials
