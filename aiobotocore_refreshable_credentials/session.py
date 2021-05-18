@@ -39,6 +39,8 @@ class AioRefreshableSharedCredentialsProvider(
         """Attempt to parse the credentials, and if found checks for the
         `aws_expiration` field, returning the value in the resulting dict.
 
+        :raises: aiobotocore.exceptions.PartialCredentialsError
+
         """
         try:
             ini_data = self._ini_parser(self._creds_filename)
@@ -71,7 +73,8 @@ class AioRefreshableSharedCredentialsProvider(
 
 
 def get_session(**kwargs) -> session.AioSession:
-    """Return an aiobotocore session that can refresh a credentials file.
+    """Return an aiobotocore.session.AioSession that can refresh a
+    credentials file.
 
     The session will include a new credentials provider that will use the
     ``aws_expiration`` field in the credentials file to know when to refresh.
