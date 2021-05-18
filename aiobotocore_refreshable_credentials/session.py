@@ -51,15 +51,14 @@ class AioRefreshableSharedCredentialsProvider(
                 LOGGER.debug(
                     'Found credentials in shared credentials file: %s',
                     self._creds_filename)
-                if self.SECRET_KEY not in config:
-                    raise exceptions.PartialCredentialsError(
-                        provider=self.METHOD, cred_var=self.SECRET_KEY)
+                access_key, secret_key = self._extract_creds_from_mapping(
+                    config, self.ACCESS_KEY, self.SECRET_KEY)
                 if require_expiry and self.EXPIRY_TIME not in config:
                     raise exceptions.PartialCredentialsError(
                         provider=self.METHOD, cred_var=self.EXPIRY_TIME)
                 result = {
-                    'access_key': config[self.ACCESS_KEY],
-                    'secret_key': config[self.SECRET_KEY],
+                    'access_key': access_key,
+                    'secret_key': secret_key,
                     'token': self._get_session_token(config),
                 }
                 if self.EXPIRY_TIME in config:
@@ -78,10 +77,10 @@ def get_session(**kwargs) -> session.AioSession:
     ``aws_expiration`` field in the credentials file to know when to refresh.
 
     """
-    abc_session = session.AioSession(**kwargs)
-    credentials_file = abc_session.get_config_variable('credentials_file')
+    aio_session = session.AioSession(**kwargs)
+    credentials_file = aio_session.get_config_variable('credentials_file')
     provider = AioRefreshableSharedCredentialsProvider(credentials_file)
-    resolver = abc_session.get_component('credential_provider')
+    resolver = aio_session.get_component('credential_provider')
     resolver.insert_before(
         credentials.SharedCredentialProvider.METHOD, provider)
-    return abc_session
+    return aio_session
