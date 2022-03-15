@@ -8,6 +8,7 @@ on:
       - '*.md'
       - '*.rst'
     tags-ignore: ["*"]
+  pull_request:
 jobs:
   test:
     runs-on: ubuntu-latest
