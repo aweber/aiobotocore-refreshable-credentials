@@ -36,7 +36,7 @@ class TestCase(unittest.IsolatedAsyncioTestCase):
 
     def test_get_session_returns_aiobotocore_session(self):
         result = aiobotocore_refreshable_credentials.get_session()
-        self.assertIsInstance(result, aiobotocore.AioSession)
+        self.assertIsInstance(result, aiobotocore.session.AioSession)
 
     async def test_with_non_refreshable_credentials(self):
         os.environ['AWS_ACCESS_KEY_ID'] = 'foo'
