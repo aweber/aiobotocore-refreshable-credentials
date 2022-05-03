@@ -1,6 +1,11 @@
 import os
 import pathlib
-import unittest
+
+try:
+    from unittest import IsolatedAsyncioTestCase
+except ImportError:
+    # python < 3.8
+    from async_case import IsolatedAsyncioTestCase
 
 import aiobotocore
 from aiobotocore import credentials
@@ -10,7 +15,7 @@ import aiobotocore_refreshable_credentials
 TESTS = pathlib.Path(__file__).parent
 
 
-class TestCase(unittest.IsolatedAsyncioTestCase):
+class TestCase(IsolatedAsyncioTestCase):
 
     MISSING_ACCESS_KEY = str(TESTS / 'data' / 'missing_access_key')
     MISSING_EXPIRATION = str(TESTS / 'data' / 'missing-expiration')
@@ -36,7 +41,7 @@ class TestCase(unittest.IsolatedAsyncioTestCase):
 
     def test_get_session_returns_aiobotocore_session(self):
         result = aiobotocore_refreshable_credentials.get_session()
-        self.assertIsInstance(result, aiobotocore.AioSession)
+        self.assertIsInstance(result, aiobotocore.session.AioSession)
 
     async def test_with_non_refreshable_credentials(self):
         os.environ['AWS_ACCESS_KEY_ID'] = 'foo'

@@ -8,13 +8,14 @@ on:
       - '*.md'
       - '*.rst'
     tags-ignore: ["*"]
+  pull_request:
 jobs:
   test:
     runs-on: ubuntu-latest
     timeout-minutes: 3
     strategy:
       matrix:
-        python: [3.8, 3.9]
+        python: ["3.7", "3.8", "3.9", "3.10"]
     container:
       image: python:${{ matrix.python }}-alpine
     steps:
